@@ -1,6 +1,8 @@
-# Backend - AnkaTechCase
+Project developed as part of the Anka Tech hiring process.  
+The application manages **clients** and their **financial asset allocations**, providing both a backend API and a frontend interface, all developed in **TypeScript** and containerized via **Docker**.
 
-This is a simple backend using [Fastify](https://www.fastify.io/), [Prisma ORM](https://www.prisma.io/), and MySQL for client management.
+👉 [GitHub Repository](https://github.com/Bryanow/-Anka-Tech-Case-PS-20251.git)
+
 
 ## Project Structure
 
