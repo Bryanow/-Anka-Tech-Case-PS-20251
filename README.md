@@ -1,6 +1,9 @@
 # AnkaTechCase - Client and Financial Asset Management
+Project developed as part of the Anka Tech hiring process.  
+The application manages **clients** and their **financial asset allocations**, providing both a backend API and a frontend interface, all developed in **TypeScript** and containerized via **Docker**.
 
-This project provides a simple client management application, including a backend built with [Fastify](https://www.fastify.io/) and [Prisma ORM](https://www.prisma.io/) using MySQL, and a frontend with [Next.js](https://nextjs.org/).
+👉 [GitHub Repository](https://github.com/Bryanow/-Anka-Tech-Case-PS-20251.git)
+
 
 ## Project Structure
 AnkaTechCase/
