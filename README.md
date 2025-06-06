@@ -1,121 +1,156 @@
-# Backend - AnkaTechCase
+# AnkaTechCase - Client and Financial Asset Management
 
-This is a simple backend using [Fastify](https://www.fastify.io/), [Prisma ORM](https://www.prisma.io/), and MySQL for client management.
+This project provides a simple client management application, including a backend built with [Fastify](https://www.fastify.io/) and [Prisma ORM](https://www.prisma.io/) using MySQL, and a frontend with [Next.js](https://nextjs.org/).
 
 ## Project Structure
-
-```
-backend/
-  .env
-  docker-compose.yml
-  package.json
-  tsconfig.json
-  prisma/
-    schema.prisma
-    migrations/
-  src/
-    index.ts
-    controllers/
-    entities/
-    models/
-    routes/
-    utils/
-    validators/
-fronend/ in progress...
-```
+AnkaTechCase/
+├── backend/
+│   ├── .env
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── migrations/
+│   └── src/
+│       ├── app.ts # Main entry point for Fastify
+│       ├── controllers/
+│       ├── entities/
+│       ├── models/
+│       ├── routes/
+│       ├── utils/
+│       └── validators/
+├── frontend/
+│   ├── package.json
+│   ├── next.config.js
+│   ├── public/
+│   ├── src/
+│   │   ├── app/
+│   │   └── components/
+│   └── tsconfig.json
+└── README.md # This README file
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- [Docker](https://www.docker.com/) (for running the MySQL database)
+-   [Node.js](https://nodejs.org/) (v18+ recommended)
+-   [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+-   [Docker](https://www.docker.com/) (for running the MySQL database and backend service)
 
-## Database Setup
+## Database & Backend Setup (Docker Compose)
 
-The project uses a MySQL database, easily started via Docker Compose.
+The project uses a MySQL database and the backend service, both easily managed via Docker Compose.
 
-1. **Start the database:**
+1.  **Navigate to the `backend` directory:**
+    ```sh
+    cd backend
+    ```
+    *Ensure you are in the directory containing `docker-compose.yml` and `Dockerfile` for the backend.*
 
-   In the project root, run:
-   ```sh
-   docker-compose up -d
-   ```
+2.  **Build and start the database and backend services:**
+    ```sh
+    docker-compose up --build -d
+    ```
+    This command will:
+    * Build the `backend` Docker image using the `Dockerfile` located in the current directory (`backend/`).
+    * Start the MySQL container, accessible internally by the backend service at `db:3306`.
+    * Start the `backend` service, exposing port `3000` from the container to port `3000` on your host machine (`localhost:3000`).
 
-   This will create a MySQL container accessible at `localhost:3307`.
+3.  **Database URL Configuration:**
+    For the backend service running inside Docker Compose, the `DATABASE_URL` environment variable is defined in `docker-compose.yml` as `mysql://root:root@db:3306/ankadb`, using the internal service name `db`.
 
-2. **Configure environment variables:**
+    *If you are running the backend application locally (outside Docker Compose), your `.env` file in the `backend` directory should contain:*
+    ```
+    DATABASE_URL="mysql://user:password@localhost:3307/ankadb"
+    ```
+    *(This assumes your `db` service in Docker Compose maps its internal port 3306 to 3307 on your host, allowing local connections).*
 
-   The `.env` file is already set up to connect to the Docker Compose database:
-   ```
-   DATABASE_URL="mysql://user:password@localhost:3307/ankadb"
-   ```
+## Backend Installation & Operations
 
-## Installing Dependencies
+These steps apply if you are working directly within the `backend` directory (e.g., for local development without Docker Compose for the backend service, or for running Prisma commands).
 
-In the `backend` folder, run:
+1.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
+2.  **Run Migrations:**
+    Before starting the backend, apply Prisma migrations to create the tables in your database:
+    ```sh
+    npx prisma migrate deploy
+    ```
+3.  **Generate Prisma Client:**
+    If needed (e.g., after schema changes), generate the Prisma client:
+    ```sh
+    npx prisma generate
+    ```
+4.  **Run the Backend:**
+    * **Development Mode (with auto-reload):**
+        ```sh
+        npx ts-node-dev src/app.ts
+        ```
+    * **Build and Run (Production-like):**
+        First, ensure your `package.json` in the `backend` directory has a `build` script (e.g., `"build": "tsc"`):
+        ```json
+        // package.json (in backend/)
+        {
+          "scripts": {
+            "build": "tsc",
+            "start": "node dist/app.js",
+            // ... other scripts
+          }
+        }
+        ```
+        Then run:
+        ```sh
+        npm run build
+        node dist/app.js
+        ```
+    The backend will be available at [http://localhost:3000](http://localhost:3000).
 
-```sh
-npm install
-```
-or
-```sh
-yarn install
-```
+## Frontend Setup (Next.js)
 
-## Running Migrations
+1.  **Navigate to the `frontend` directory:**
+    ```sh
+    cd ../frontend
+    ```
+2.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
+3.  **Start the Frontend Development Server:**
+    ```sh
+    npm run dev
+    ```
+    The frontend will typically be available at [http://localhost:3000](http://localhost:3000).
 
-Before starting the backend, run Prisma migrations to create the tables:
+4.  **Access the Clients Page:**
+    To view the client list, navigate to [http://localhost:3000/clients](http://localhost:3000/clients) in your browser.
+    * **Important:** Ensure the API endpoint in your `frontend/src/app/clients/page.tsx` matches your backend configuration (e.g., `http://localhost:3000/clients` if no `/api` prefix is used in the backend).
 
-```sh
-npx prisma migrate deploy
-```
+## Endpoints (Backend)
 
-## Generating Prisma Client
-
-If needed, generate the Prisma client:
-
-```sh
-npx prisma generate
-```
-
-## Running the Backend
-
-To run in development mode (with auto-reload):
-
-```sh
-npx ts-node-dev src/index.ts
-```
-
-Or to build and run:
-
-```sh
-npm run build
-node dist/index.js
-```
-
-The backend will be available at [http://localhost:3001](http://localhost:3001).
-
-## Endpoints
-
-- `POST /clients` - Create a new client
-- `GET /clients` - List all clients
-- `PUT /clients/:id` - Update an existing client
+-   `POST /clients` - Create a new client
+-   `GET /clients` - List all clients
+-   `PUT /clients/:id` - Update an existing client
 
 ## Entity Structure
 
-See the model in [`prisma/schema.prisma`](prisma/schema.prisma).
+See the model in [`backend/prisma/schema.prisma`](backend/prisma/schema.prisma).
 
 ## Notes
 
-- The `.env` file **should not be versioned** (already in `.gitignore`).
-- The project uses [Zod](https://zod.dev/) for data validation.
-- Prisma Client is initialized in [`src/utils/prisma.ts`](src/utils/prisma.ts).
+-   The `.env` file **should not be versioned** (already in `.gitignore`).
+-   The project uses [Zod](https://zod.dev/) for data validation.
+-   Prisma Client is initialized in [`backend/src/utils/prisma.ts`](backend/src/utils/prisma.ts).
+-   The frontend uses [ShadCN](https://ui.shadcn.com/) for UI components, [React Query](https://tanstack.com/query/latest) for data fetching, and [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for form handling.
 
 ## Useful Scripts
 
-- `docker-compose up -d` - Start the MySQL database
-- `npx prisma migrate deploy` - Apply migrations to the database
-- `npx ts-node-dev src/index.ts` - Start the backend in dev mode
+-   **Start All Services (from `AnkaTechCase/backend`):** `docker-compose up -d`
+-   **Stop All Services (from `AnkaTechCase/backend`):** `docker-compose down`
+-   **Apply Migrations (from `AnkaTechCase/backend`):** `npx prisma migrate deploy`
+-   **Start Backend in Dev Mode (from `AnkaTechCase/backend`):** `npx ts-node-dev src/app.ts`
+-   **Start Frontend in Dev Mode (from `AnkaTechCase/frontend`):** `npm run dev`
 
 ---
 

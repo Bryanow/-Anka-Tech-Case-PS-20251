@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
   db:
@@ -11,9 +10,22 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
-     - "3307:3306"
+      - "3307:3306"
     volumes:
       - dbdata:/var/lib/mysql
 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anka_backend
+    restart: always
+    environment:
+      DATABASE_URL: mysql://root:root@db:3306/ankadb
+      
+    ports:
+      - "3000:3000" 
+    depends_on:
+      - db
 volumes:
   dbdata:

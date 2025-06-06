@@ -19,4 +19,23 @@ model Client {
   email     String   @unique
   status    Boolean  @default(true)
   createdAt DateTime @default(now())
+  allocations ClientAsset[]
+}
+
+model Asset {
+  id        Int       @id @default(autoincrement())
+  name      String
+  value     Float
+  createdAt DateTime  @default(now())
+  allocations ClientAsset[]
+}
+
+model ClientAsset {
+  id        Int     @id @default(autoincrement())
+  clientId  Int
+  assetId   Int
+  quantity  Int
+
+  client    Client  @relation(fields: [clientId], references: [id])
+  asset     Asset   @relation(fields: [assetId], references: [id])
 }

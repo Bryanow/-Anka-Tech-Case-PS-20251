@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
-import { createClientSchema, updateClientSchema } from "../validators/ClientValidator"
-import { ClientModel } from "../models/ClientModel"
+import { createClientSchema, updateClientSchema } from "../validators/client.validator"
+import { ClientModel } from "../models/client.model"
 
 export const ClientController = {
   async create(request: FastifyRequest, reply: FastifyReply) {
