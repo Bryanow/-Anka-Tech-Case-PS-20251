@@ -1,11 +1,11 @@
-# AnkaTechCase - Client and Financial Asset Management
-Project developed as part of the Anka Tech hiring process.  
-The application manages **clients** and their **financial asset allocations**, providing both a backend API and a frontend interface, all developed in **TypeScript** and containerized via **Docker**.
+Okay, Bryan! Here is the unified and updated README.md content, translated into English, ready for your project's root directory.
 
-👉 [GitHub Repository](https://github.com/Bryanow/-Anka-Tech-Case-PS-20251.git)
+AnkaTechCase - Client and Financial Asset Management
+This project was developed as part of the Anka Tech hiring process and aims to manage clients and their financial asset allocations. The application consists of a backend API and a frontend interface, both developed in TypeScript and containerized via Docker.
 
+👉 GitHub Repository
 
-## Project Structure
+Project Structure
 AnkaTechCase/
 ├── backend/
 │   ├── .env
@@ -32,129 +32,136 @@ AnkaTechCase/
 │   │   ├── app/
 │   │   └── components/
 │   └── tsconfig.json
-└── README.md # This README file
+└── README.md # This unified README file
+Prerequisites
+To set up and run this project, you will need the following installed on your machine:
 
-## Prerequisites
+Node.js (v18+ recommended)
+npm (or yarn/pnpm/bun, if preferred)
+Docker (for managing the MySQL database and backend service)
+Project Setup and Initialization
+Follow these step-by-step instructions to get the project up and running. All commands should be executed in your Powershell (or similar) terminal from the project root folder AnkaTechCase/ (where this README.md file is located), unless otherwise specified.
 
--   [Node.js](https://nodejs.org/) (v18+ recommended)
--   [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
--   [Docker](https://www.docker.com/) (for running the MySQL database and backend service)
+1. Initial Preparation
+Navigate to the backend folder and install dependencies:
+Bash
 
-## Database & Backend Setup (Docker Compose)
+cd backend
+npm install
+Navigate back to the project root folder:
+Bash
 
+cd ..
+Navigate to the frontend folder and install dependencies:
+Bash
+
+cd frontend
+npm install
+Navigate back to the project root folder:
+Bash
+
+cd ..
+2. Backend and Database Setup & Initialization (Docker Compose)
 The project uses a MySQL database and the backend service, both easily managed via Docker Compose.
 
-1.  **Navigate to the `backend` directory:**
-    ```sh
-    cd backend
-    ```
-    *Ensure you are in the directory containing `docker-compose.yml` and `Dockerfile` for the backend.*
+Navigate to the backend directory:
 
-2.  **Build and start the database and backend services:**
-    ```sh
-    docker-compose up --build -d
-    ```
-    This command will:
-    * Build the `backend` Docker image using the `Dockerfile` located in the current directory (`backend/`).
-    * Start the MySQL container, accessible internally by the backend service at `db:3306`.
-    * Start the `backend` service, exposing port `3000` from the container to port `3000` on your host machine (`localhost:3000`).
+Bash
 
-3.  **Database URL Configuration:**
-    For the backend service running inside Docker Compose, the `DATABASE_URL` environment variable is defined in `docker-compose.yml` as `mysql://root:root@db:3306/ankadb`, using the internal service name `db`.
+cd backend
+Ensure you are in the directory containing docker-compose.yml and Dockerfile for the backend.
 
-    *If you are running the backend application locally (outside Docker Compose), your `.env` file in the `backend` directory should contain:*
-    ```
-    DATABASE_URL="mysql://user:password@localhost:3307/ankadb"
-    ```
-    *(This assumes your `db` service in Docker Compose maps its internal port 3306 to 3307 on your host, allowing local connections).*
+Clean up the Docker environment and start the services:
+It's crucial to start with a clean database to ensure migrations and seeding work correctly.
 
-## Backend Installation & Operations
+Bash
 
-These steps apply if you are working directly within the `backend` directory (e.g., for local development without Docker Compose for the backend service, or for running Prisma commands).
+docker-compose down -v # Removes containers and volumes (DB data)
+docker-compose up --build -d # Builds/rebuilds the backend image and starts services in the background
+This command will:
 
-1.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
-2.  **Run Migrations:**
-    Before starting the backend, apply Prisma migrations to create the tables in your database:
-    ```sh
-    npx prisma migrate deploy
-    ```
-3.  **Generate Prisma Client:**
-    If needed (e.g., after schema changes), generate the Prisma client:
-    ```sh
-    npx prisma generate
-    ```
-4.  **Run the Backend:**
-    * **Development Mode (with auto-reload):**
-        ```sh
-        npx ts-node-dev src/app.ts
-        ```
-    * **Build and Run (Production-like):**
-        First, ensure your `package.json` in the `backend` directory has a `build` script (e.g., `"build": "tsc"`):
-        ```json
-        // package.json (in backend/)
-        {
-          "scripts": {
-            "build": "tsc",
-            "start": "node dist/app.js",
-            // ... other scripts
-          }
-        }
-        ```
-        Then run:
-        ```sh
-        npm run build
-        node dist/app.js
-        ```
-    The backend will be available at [http://localhost:3000](http://localhost:3000).
+Build the backend Docker image using its Dockerfile.
+Start the MySQL container, internally accessible by the backend service at db:3306.
+Start the backend service, exposing port 3000 from the container to port 3000 on your host machine (localhost:3000).
+Database URL Configuration:
+For the backend service running inside Docker Compose, the DATABASE_URL environment variable is defined in docker-compose.yml as mysql://root:root@db:3306/ankadb, using the internal service name db.
 
-## Frontend Setup (Next.js)
+If you are running the backend application locally (outside Docker Compose, which is not the main focus of this README, but for your information), your .env file in the backend directory should contain:
 
-1.  **Navigate to the `frontend` directory:**
-    ```sh
-    cd ../frontend
-    ```
-2.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
-3.  **Start the Frontend Development Server:**
-    ```sh
-    npm run dev
-    ```
-    The frontend will typically be available at [http://localhost:3000](http://localhost:3000).
+DATABASE_URL="mysql://user:password@localhost:3307/ankadb"
+(This assumes your db service in Docker Compose maps its internal port 3306 to 3307 on your host, allowing local connections).
 
-4.  **Access the Clients Page:**
-    To view the client list, navigate to [http://localhost:3000/clients](http://localhost:3000/clients) in your browser.
-    * **Important:** Ensure the API endpoint in your `frontend/src/app/clients/page.tsx` matches your backend configuration (e.g., `http://localhost:3000/clients` if no `/api` prefix is used in the backend).
+3. Applying Prisma Migrations
+With Docker services running and the database clean, apply the migrations to create the tables in your database:
 
-## Endpoints (Backend)
+Bash
 
--   `POST /clients` - Create a new client
--   `GET /clients` - List all clients
--   `PUT /clients/:id` - Update an existing client
+docker-compose exec backend npx prisma migrate dev --name init_database_schema --schema src/prisma/schema.prisma
+Attention: If Prisma asks "Do you want to reset your database?", type y (yes) and press Enter. This might happen because you removed the volumes in the previous step.
+You should see messages indicating that migrations were applied and the Prisma Client was generated.
+4. Initial Database Population (Seed)
+To populate the database with initial client and asset data (including allocations), run the seed script:
 
-## Entity Structure
+Bash
 
-See the model in [`backend/prisma/schema.prisma`](backend/prisma/schema.prisma).
+docker-compose exec backend node dist/prisma/seed.js
+You should see log messages like Start seeding ..., Upserted asset..., Upserted client..., and Upserted client asset..., indicating that the data has been successfully inserted.
 
-## Notes
+**Note:** The `seed` script in the backend's `package.json` has been adjusted to `node dist/prisma/seed.js` to ensure correct execution within the container.
+5. Frontend Initialization
+Now that the backend and database are running and populated, you can start the frontend.
 
--   The `.env` file **should not be versioned** (already in `.gitignore`).
--   The project uses [Zod](https://zod.dev/) for data validation.
--   Prisma Client is initialized in [`backend/src/utils/prisma.ts`](backend/src/utils/prisma.ts).
--   The frontend uses [ShadCN](https://ui.shadcn.com/) for UI components, [React Query](https://tanstack.com/query/latest) for data fetching, and [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for form handling.
+Navigate back to the frontend directory:
+Bash
 
-## Useful Scripts
+cd ../frontend
+Start the Frontend Development Server:
+Bash
 
--   **Start All Services (from `AnkaTechCase/backend`):** `docker-compose up -d`
--   **Stop All Services (from `AnkaTechCase/backend`):** `docker-compose down`
--   **Apply Migrations (from `AnkaTechCase/backend`):** `npx prisma migrate deploy`
--   **Start Backend in Dev Mode (from `AnkaTechCase/backend`):** `npx ts-node-dev src/app.ts`
--   **Start Frontend in Dev Mode (from `AnkaTechCase/frontend`):** `npm run dev`
+npm run dev
+The frontend will be accessible in your browser, typically at http://localhost:3000.
+6. Accessing the Application
+Access the frontend in your browser: http://localhost:3000
+To view the client list and their allocations, navigate to: http://localhost:3000/clients
+Important: Ensure that the API endpoint in your frontend (frontend/src/app/clients/page.tsx or related service files) correctly points to the backend (http://localhost:3000 or similar, depending on your configuration).
+Backend API Endpoints
+The backend exposes the following endpoints:
 
----
+POST /clients - Create a new client
+GET /clients - List all clients
+PUT /clients/:id - Update an existing client
+(Assuming there are also CRUD endpoints for Assets and ClientAssets if needed)
 
+Entity Structure
+Refer to the model in backend/prisma/schema.prisma to understand the structure of the entities (Client, Asset, ClientAsset).
+
+Important Notes
+The .env file SHOULD NOT BE VERSIONED (it's already in .gitignore).
+The project uses Zod for data validation in both the backend and frontend.
+The Prisma Client is initialized in backend/src/utils/prisma.ts.
+The frontend uses ShadCN for UI components, React Query for data fetching, and React Hook Form with Zod for form handling.
+This project uses next/font to automatically optimize and load the Geist font.
+Useful Scripts
+All scripts below should be executed from the directory where the corresponding package.json is located (i.e., backend/ for backend scripts and frontend/ for frontend scripts).
+
+Stop all Docker services (from backend/):
+Bash
+
+docker-compose down
+Start all Docker services (from backend/):
+Bash
+
+docker-compose up -d
+Run the database seed (from backend/):
+Bash
+
+npm run seed # (After initial setup and build)
+Start Backend in Development Mode (from backend/ - without Docker Compose for backend):
+Bash
+
+npm run dev # (If you are not using docker-compose for the backend)
+Start Frontend in Development Mode (from frontend/):
+Bash
+
+npm run dev
 Feel free to open issues or pull requests!
