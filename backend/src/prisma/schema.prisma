@@ -24,18 +24,19 @@ model Client {
 
 model Asset {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique
   value     Float
   createdAt DateTime  @default(now())
   allocations ClientAsset[]
 }
 
 model ClientAsset {
-  id        Int     @id @default(autoincrement())
-  clientId  Int
-  assetId   Int
-  quantity  Int
+  id           Int      @id @default(autoincrement())
+  clientId     Int
+  assetId      Int
+  quantity     Int
+  client       Client   @relation(fields: [clientId], references: [id])
+  asset        Asset    @relation(fields: [assetId], references: [id])
 
-  client    Client  @relation(fields: [clientId], references: [id])
-  asset     Asset   @relation(fields: [assetId], references: [id])
+  @@unique([clientId, assetId])
 }

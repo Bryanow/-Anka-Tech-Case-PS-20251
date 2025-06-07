@@ -1,4 +1,3 @@
-// src/models/ClientAssetModel.ts
 import { prisma } from "../utils/prisma"
 import { ClientAssetEntity } from "../entities/ClientAssets"
 

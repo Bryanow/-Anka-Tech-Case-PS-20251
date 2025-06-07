@@ -1,4 +1,3 @@
-// src/controllers/clientAsset.controller.ts
 import { FastifyRequest, FastifyReply } from "fastify"
 import { createClientAssetSchema, updateClientAssetSchema } from "../validators/client-assets.validator"
 import { ClientAssetModel } from "../models/client-assets.model"
@@ -36,8 +35,8 @@ export const ClientAssetController = {
     }
   },
 
-  async listByClient(request: FastifyRequest<{ Params: { clientId: string } }>, reply: FastifyReply) {
-    const clientId = Number(request.params.clientId)
+  async listByClient(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+    const clientId = Number(request.params.id)
 
     if (isNaN(clientId) || clientId <= 0) {
       return reply.status(400).send({ error: "Invalid client ID." })
