@@ -1,4 +1,3 @@
-// backend/src/controllers/client.controller.ts
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";

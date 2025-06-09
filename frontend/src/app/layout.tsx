@@ -1,11 +1,13 @@
-import './global.css'; 
+// frontend/src/app/layout.tsx
+import '@/styles/globals.css';
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "../components/ui/theme-provider"; 
+import { Providers } from './providers';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Toaster } from "@/components/ui/sonner"; // Adicione o Toaster se não tiver
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,9 +32,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
+        <Providers
           attribute="class"
-          defaultTheme="dark" // Define o tema padrão como 'dark'
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
@@ -41,23 +43,22 @@ export default function RootLayout({
               <ul className="flex space-x-4">
                 <li>
                   <Link href="/clients" passHref>
-                    <Button variant="ghost">Clientes</Button>
+                    <Button variant="ghost">Clients</Button>
                   </Link>
                 </li>
                 <li>
                   <Link href="/assets" passHref>
-                    <Button variant="ghost">Ativos Disponíveis</Button>
+                    <Button variant="ghost">Assets</Button>
                   </Link>
                 </li>
               </ul>
             </nav>
-            {/* Outros elementos do cabeçalho, se houver */}
           </header>
           <main className="p-4">
             {children}
           </main>
-          <Toaster /> {/* Inclua o Toaster aqui se você usa sonner para notificações */}
-        </ThemeProvider>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

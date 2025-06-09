@@ -1,4 +1,3 @@
-// src/server.ts (ou app.ts)
 import fastify from "fastify"
 import cors from "@fastify/cors" // Certifique-se de ter o CORS instalado e configurado
 import { clientRoutes } from "./routes/client.routes"

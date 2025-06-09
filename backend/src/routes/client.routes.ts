@@ -1,4 +1,3 @@
-// backend/src/routes/client.routes.ts
 import { FastifyInstance } from "fastify"
 import { ClientController } from "../controllers/client.controller"
 
